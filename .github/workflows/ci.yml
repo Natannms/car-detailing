@@ -1,0 +1,38 @@
+name: Quality Gate
+
+on:
+  push:
+    branches: [development, homolog, main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/kanban_ai
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Block console.log
+        run: node scripts/check-console.mjs
+
+      - name: Block large files
+        run: node scripts/check-file-size.mjs
+
+      - name: Prisma validate
+        run: npm run prisma:validate
+
+      - name: Run coverage
+        run: npm run test:coverage
+
+      - name: Build
+        run: npm run build

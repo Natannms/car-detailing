@@ -1,0 +1,10 @@
+echo "🔍 Verificando console.log..."
+node scripts/check-console.mjs || exit 1
+
+echo "📏 Verificando tamanho de arquivos..."
+node scripts/check-file-size.mjs || exit 1
+
+echo "🧪 Verificando cobertura..."
+npm run test:coverage || exit 1
+
+echo "✅ Commit permitido."

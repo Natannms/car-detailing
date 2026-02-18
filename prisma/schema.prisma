@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ORG_ADMIN
+  MEMBER
+}
+
+enum ProjectType {
+  SAAS
+  CLIENT
+  INTERNAL
+  MVP
+  POC
+}
+
+enum Methodology {
+  SCRUM
+  KANBAN
+  HYBRID
+  WATERFALL
+}
+
+enum ProjectStatus {
+  BACKLOG
+  PLANNING
+  EXECUTION
+  HOMOLOGATION
+  PRODUCTION
+  FINISHED
+  CANCELED
+}
+
+enum HealthStatus {
+  GREEN
+  YELLOW
+  RED
+}
+
+enum BillingModel {
+  FIXED
+  HOURLY
+  MONTHLY
+}
+
+enum ArchitectureType {
+  MONOLITH
+  MICROSERVICES
+  EVENT_DRIVEN
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum VisibilityLevel {
+  PRIVATE
+  ORGANIZATION
+  PUBLIC
+}
+
+model Organization {
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     User[]
+  clients   Client[]
+  projects  Project[]
+  invites   InviteToken[]
+}
+
+model User {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  passwordHash   String?
+  clerkUserId    String?      @unique
+  roles          Role[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  invitesCreated InviteToken[] @relation("InviteCreatedBy")
+  invitesUsed    InviteToken[] @relation("InviteUsedBy")
+
+  @@unique([email])
+}
+
+model Client {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  code           String?
+  email          String?
+  phone          String?
+  address        String?
+  instagram      String?
+  linkedin       String?
+  companyName    String?
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  projects       Project[]
+
+  @@unique([organizationId, name])
+  @@unique([organizationId, code])
+  @@index([organizationId])
+}
+
+model InviteToken {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tokenHash      String       @unique
+  roleToGrant    Role         @default(MEMBER)
+  emailHint      String?
+  expiresAt      DateTime
+  usedAt         DateTime?
+  usedByUserId   String?     @db.Uuid
+  createdByUserId String      @db.Uuid
+  createdBy      User         @relation("InviteCreatedBy", fields: [createdByUserId], references: [id], onDelete: Cascade)
+  usedBy         User?        @relation("InviteUsedBy", fields: [usedByUserId], references: [id], onDelete: SetNull)
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([expiresAt])
+}
+
+model Project {
+  id               String       @id @default(uuid()) @db.Uuid
+  organizationId   String       @db.Uuid
+  clientId         String?      @db.Uuid
+
+  name             String
+  code             String       @unique
+  description      String?
+  summary          String
+
+  type             ProjectType
+  methodology      Methodology
+
+  status           ProjectStatus  @default(BACKLOG)
+  health           HealthStatus   @default(GREEN)
+
+  priority         PriorityLevel  @default(MEDIUM)
+  complexity       Int?
+  riskLevel        RiskLevel?
+
+  startDate        DateTime
+  estimatedEndDate DateTime?
+  actualEndDate    DateTime?
+
+  estimatedHours   Float?
+  actualHours      Float?
+
+  contractValue    Float?
+  billingModel     BillingModel?
+  slaHours         Int?
+
+  estimatedBudget  Float?
+  actualCost       Float?
+  expectedMargin   Float?
+  actualMargin     Float?
+
+  mainStack        String?
+  architecture     ArchitectureType?
+  databaseType     String?
+  cloudProvider    String?
+  repositoryUrl    String?
+
+  allowMultipleTeams  Boolean @default(false)
+  allowMultipleBoards Boolean @default(false)
+  financialControl    Boolean @default(false)
+  visibility          VisibilityLevel @default(PRIVATE)
+
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  deletedAt        DateTime?
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client           Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  epics            Epic[]
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+}
+
+model Epic {
+  id        String   @id @default(uuid()) @db.Uuid
+  projectId String   @db.Uuid
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title     String
+  context   String?
+  expected  String?
+  status    String   @default("TODO")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  stories   Story[]
+
+  @@unique([projectId, title])
+}
+
+model Story {
+  id                 String   @id @default(uuid()) @db.Uuid
+  epicId             String   @db.Uuid
+  epic               Epic     @relation(fields: [epicId], references: [id], onDelete: Cascade)
+  title              String
+  userStory          String
+  acceptanceCriteria String
+  status             String   @default("TODO")
+  points             Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  tasks              Task[]
+  taskBoardColumns   TaskBoardColumn[]
+
+  @@unique([epicId, title])
+}
+
+model TaskBoardColumn {
+  id        String   @id @default(uuid()) @db.Uuid
+  storyId   String   @db.Uuid
+  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  name      String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([storyId, name])
+  @@index([storyId])
+}
+
+model Task {
+  id          String   @id @default(uuid()) @db.Uuid
+  storyId     String   @db.Uuid
+  story       Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  status      String   @default("TODO")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([storyId, title])
+}
