@@ -18,7 +18,7 @@ export class InviteService {
     private readonly invites: InviteTokenRepository,
   ) {}
 
-  async createInvite(auth: AuthContext, input?: { emailHint?: string | null; expiresInDays?: number }) {
+  async createInvite(auth: AuthContext, input?: { emailHint?: string | null; expiresInDays?: number; roleToGrant?: "ORG_ADMIN" | "MEMBER" | "DOCTOR" }) {
     if (!auth.roles.includes("ORG_ADMIN")) throw new ForbiddenError();
     const org = await this.organizations.findById(auth.organizationId);
     if (!org) throw new NotFoundError("Organização não encontrada");
@@ -32,6 +32,7 @@ export class InviteService {
     const invite = await this.invites.create({
       organizationId: auth.organizationId,
       tokenHash,
+      roleToGrant: input?.roleToGrant ?? "MEMBER",
       emailHint: input?.emailHint ?? null,
       expiresAt,
       createdByUserId: auth.userId,
@@ -84,4 +85,3 @@ export class InviteService {
     return this.users.listByOrganization(auth.organizationId);
   }
 }
-

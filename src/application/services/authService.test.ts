@@ -19,13 +19,21 @@ class InMemoryOrganizations implements OrganizationRepository {
 
 class InMemoryUsers implements UserRepository {
   users: User[] = [];
-  async create(input: { organizationId: string; email: string; passwordHash?: string | null; clerkUserId?: string | null; roles: ("ORG_ADMIN" | "MEMBER")[] }) {
+  async create(input: {
+    organizationId: string;
+    email: string;
+    passwordHash?: string | null;
+    firebaseUid?: string | null;
+    unitId?: string | null;
+    roles: ("ORG_ADMIN" | "MEMBER")[];
+  }) {
     const user: User = {
       id: `user-${this.users.length + 1}`.padStart(36, "0"),
       organizationId: input.organizationId,
+      unitId: input.unitId ?? null,
       email: input.email,
       passwordHash: input.passwordHash ?? null,
-      clerkUserId: input.clerkUserId ?? null,
+      firebaseUid: input.firebaseUid ?? null,
       roles: input.roles,
     };
     this.users.push(user);
@@ -37,13 +45,21 @@ class InMemoryUsers implements UserRepository {
   async findByEmail(email: string) {
     return this.users.find(u => u.email === email) ?? null;
   }
-  async findByClerkUserId(clerkUserId: string) {
-    return this.users.find(u => u.clerkUserId === clerkUserId) ?? null;
+  async findByFirebaseUid(firebaseUid: string) {
+    return this.users.find(u => u.firebaseUid === firebaseUid) ?? null;
   }
-  async attachClerkUserId(id: string, clerkUserId: string) {
+  async attachFirebaseUid(id: string, firebaseUid: string) {
     const user = this.users.find(u => u.id === id);
     if (!user) throw new Error("not found");
-    user.clerkUserId = clerkUserId;
+    user.firebaseUid = firebaseUid;
+    return user;
+  }
+  async update(id: string, patch: Partial<Pick<User, "organizationId" | "roles" | "unitId">>) {
+    const user = this.users.find(u => u.id === id);
+    if (!user) throw new Error("not found");
+    if (patch.unitId !== undefined) user.unitId = patch.unitId;
+    if (patch.roles) user.roles = patch.roles;
+    if (patch.organizationId) user.organizationId = patch.organizationId!;
     return user;
   }
   async listByOrganization(organizationId: string) {

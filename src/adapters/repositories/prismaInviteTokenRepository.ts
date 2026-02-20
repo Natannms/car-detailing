@@ -4,7 +4,7 @@ import type { InviteTokenRepository } from "../../domain/repositories";
 export class PrismaInviteTokenRepository implements InviteTokenRepository {
   constructor(private readonly db: PrismaClient) {}
 
-  async create(input: { organizationId: string; tokenHash: string; emailHint?: string | null; expiresAt: Date; createdByUserId: string }) {
+  async create(input: { organizationId: string; tokenHash: string; roleToGrant: any; emailHint?: string | null; expiresAt: Date; createdByUserId: string }) {
     return this.db.inviteToken.create({
       data: {
         organizationId: input.organizationId,
@@ -12,7 +12,7 @@ export class PrismaInviteTokenRepository implements InviteTokenRepository {
         emailHint: input.emailHint ?? null,
         expiresAt: input.expiresAt,
         createdByUserId: input.createdByUserId,
-        roleToGrant: "MEMBER",
+        roleToGrant: input.roleToGrant,
       },
     });
   }
@@ -42,4 +42,3 @@ export class PrismaInviteTokenRepository implements InviteTokenRepository {
     await this.db.inviteToken.delete({ where: { id } });
   }
 }
-

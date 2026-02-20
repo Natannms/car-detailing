@@ -19,6 +19,7 @@ export function errorToResponse(error: unknown) {
 
   const domainError = error instanceof DomainErrorBase ? (error as DomainError) : null;
   if (!domainError) {
+    console.error("[api:error]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2002") {
         return NextResponse.json(

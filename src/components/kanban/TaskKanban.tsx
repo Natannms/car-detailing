@@ -47,13 +47,13 @@ function Card({
       {...attributes}
       {...listeners}
       className={[
-        "rounded-2xl border border-gray-100 bg-white p-3 shadow-[0_10px_25px_rgba(15,23,42,0.08)]",
+        "rounded-2xl border border-border bg-card p-3 shadow-[0_10px_25px_rgba(15,23,42,0.08)]",
         "transition hover:shadow-[0_14px_34px_rgba(15,23,42,0.12)]",
         isDragging ? "opacity-70" : "",
       ].join(" ")}
     >
-      <div className="text-sm font-semibold text-gray-900">{task.title}</div>
-      {task.description ? <div className="mt-1 text-xs text-gray-600">{clampText(task.description, 140)}</div> : null}
+      <div className="text-sm font-semibold text-foreground">{task.title}</div>
+      {task.description ? <div className="mt-1 text-xs text-muted-foreground">{clampText(task.description, 140)}</div> : null}
     </div>
   );
 }
@@ -85,8 +85,8 @@ function ColumnView({
     <div
       ref={setNodeRef}
       className={[
-        "w-[min(340px,calc(100vw-32px))] shrink-0 rounded-2xl border bg-white/60 p-3",
-        isOver ? "border-indigo-300" : "border-gray-200",
+        "w-[min(340px,calc(100vw-32px))] shrink-0 rounded-2xl border border-border bg-card/80 p-3",
+        isOver ? "border-primary" : "border-border",
       ].join(" ")}
     >
       <div className="relative flex items-center justify-between gap-2 pb-3" data-kanban-menu>
@@ -96,7 +96,7 @@ function ColumnView({
               <input
                 value={renameValue}
                 onChange={e => setRenameValue(e.target.value)}
-                className="h-9 w-44 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-9 w-44 rounded-xl border border-border bg-card px-3 text-sm font-semibold text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               <button
                 type="button"
@@ -107,7 +107,7 @@ function ColumnView({
               </button>
               <button
                 type="button"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground hover:bg-muted"
                 onClick={onCancelRename}
                 aria-label="Cancelar"
               >
@@ -116,8 +116,8 @@ function ColumnView({
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <div className="truncate text-sm font-semibold text-gray-900">{column.name}</div>
-              <div className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">{tasks.length}</div>
+              <div className="truncate text-sm font-semibold text-foreground">{column.name}</div>
+              <div className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">{tasks.length}</div>
             </div>
           )}
         </div>
@@ -125,7 +125,7 @@ function ColumnView({
         {!renaming ? (
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-gray-500 hover:bg-white hover:text-gray-700"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground"
             onClick={onToggleMenu}
             aria-label="Menu"
           >
@@ -345,14 +345,14 @@ export function TaskKanban({
     <div className="grid gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-base font-semibold text-gray-900">Kanban</h2>
-          <div className="text-sm text-gray-600">Arraste cards entre colunas para mudar o status.</div>
+          <h2 className="text-base font-semibold text-foreground">Kanban</h2>
+          <div className="text-sm text-muted-foreground">Arraste cards entre colunas para mudar o status.</div>
         </div>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => setNewColumnOpen(v => !v)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-white px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-black/5 hover:bg-gray-50"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-card px-3 text-sm font-semibold text-foreground shadow-sm ring-1 ring-border hover:bg-muted"
           >
             <Plus size={18} weight="bold" />
             Nova coluna
@@ -361,17 +361,17 @@ export function TaskKanban({
       </div>
 
       {newColumnOpen ? (
-        <div className="flex flex-col gap-2 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-3 shadow-sm sm:flex-row sm:items-center">
           <input
             value={newColumnName}
             onChange={e => setNewColumnName(e.target.value)}
             placeholder="Nome da coluna"
-            className="h-11 flex-1 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+            className="h-11 flex-1 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
           <div className="flex items-center justify-end gap-2">
             <button
               type="button"
-              className="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground hover:bg-muted"
               onClick={() => {
                 setNewColumnName("");
                 setNewColumnOpen(false);
@@ -392,7 +392,7 @@ export function TaskKanban({
 
       {error ? <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
 
-      {columnsLoading ? <div className="text-sm text-gray-600">Carregando colunas…</div> : null}
+      {columnsLoading ? <div className="text-sm text-muted-foreground">Carregando colunas…</div> : null}
 
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-2">
@@ -418,10 +418,10 @@ export function TaskKanban({
                   }}
                 />
                 {menuOpenId === c.id ? (
-                  <div className="absolute right-0 top-[46px] z-30 w-44 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.12)]">
+                  <div className="absolute right-0 top-[46px] z-30 w-44 overflow-hidden rounded-xl border border-border bg-card shadow-[0_10px_30px_rgba(15,23,42,0.12)]">
                     <button
                       type="button"
-                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted"
                       onClick={() => {
                         setMenuOpenId(null);
                         startRename(c);

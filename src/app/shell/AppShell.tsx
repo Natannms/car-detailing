@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useClerk } from "@clerk/nextjs";
+import { getFirebaseAuth } from "@/lib/firebaseClient";
 import styles from "./AppShell.module.css";
 import { clearSession, getSession, type Session } from "../ui/session";
 
@@ -20,7 +20,6 @@ function extractProjectId(pathname: string) {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const clerk = useClerk();
   const [session, setSession] = useState<Session>(() => getSession());
 
   useEffect(() => {
@@ -38,10 +37,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   if (isPublicPath(pathname)) return <>{children}</>;
 
   const onLogout = async () => {
-    await clerk.signOut({ redirectUrl: "/login" });
+    getFirebaseAuth()?.signOut();
+    await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
     clearSession();
     setSession(getSession());
     router.push("/login");
+    router.refresh();
   };
 
   return (

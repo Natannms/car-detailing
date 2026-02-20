@@ -183,7 +183,7 @@ export function ProjectCreateForm({
             onClick={() => setStep(s.n as any)}
             className={[
               "rounded-xl px-3 py-2 text-xs font-semibold transition",
-              step === s.n ? "bg-indigo-600 text-white shadow-sm" : "bg-gray-50 text-gray-600 hover:bg-gray-100",
+              step === s.n ? "bg-indigo-600 text-white shadow-sm" : "bg-muted text-muted-foreground hover:bg-muted/80",
             ].join(" ")}
           >
             {s.n}. {s.label}
@@ -196,30 +196,30 @@ export function ProjectCreateForm({
       {step === 1 ? (
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Nome do Projeto *</label>
+            <label className="text-sm font-medium text-foreground">Nome do Projeto *</label>
             <input
               value={draft.name}
               onChange={e => setDraft({ name: e.target.value })}
-              className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Código interno *</label>
+            <label className="text-sm font-medium text-foreground">Código interno *</label>
             <input
               value={draft.code}
               onChange={e => setDraft({ code: e.target.value })}
               placeholder="ex: WALM-APP-01"
-              className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Cliente</label>
+            <label className="text-sm font-medium text-foreground">Cliente</label>
             <select
               value={draft.clientId ?? ""}
               onChange={e => setDraft({ clientId: e.target.value ? e.target.value : null })}
-              className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               disabled={clientsLoading}
             >
               <option value="">{clientsLoading ? "Carregando…" : "Nenhum"}</option>
@@ -242,11 +242,11 @@ export function ProjectCreateForm({
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Tipo do Projeto</label>
+              <label className="text-sm font-medium text-foreground">Tipo do Projeto</label>
               <select
                 value={draft.type}
                 onChange={e => setDraft({ type: e.target.value as any })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="SAAS">SaaS</option>
                 <option value="CLIENT">Cliente externo</option>
@@ -257,11 +257,11 @@ export function ProjectCreateForm({
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Metodologia</label>
+              <label className="text-sm font-medium text-foreground">Metodologia</label>
               <select
                 value={draft.methodology}
                 onChange={e => setDraft({ methodology: e.target.value as any })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="SCRUM">Scrum</option>
                 <option value="KANBAN">Kanban</option>
@@ -272,12 +272,12 @@ export function ProjectCreateForm({
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Descrição resumida *</label>
+            <label className="text-sm font-medium text-foreground">Descrição resumida *</label>
             <textarea
               value={draft.summary}
               onChange={e => setDraft({ summary: e.target.value })}
               rows={4}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -286,81 +286,81 @@ export function ProjectCreateForm({
       {step === 2 ? (
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Descrição detalhada</label>
+            <label className="text-sm font-medium text-foreground">Descrição detalhada</label>
             <textarea
               value={draft.descriptionDetailed}
               onChange={e => setDraft({ descriptionDetailed: e.target.value })}
               rows={5}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Problema que resolve</label>
+              <label className="text-sm font-medium text-foreground">Problema que resolve</label>
               <textarea
                 value={draft.problem}
                 onChange={e => setDraft({ problem: e.target.value })}
                 rows={4}
-                className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Público-alvo</label>
+              <label className="text-sm font-medium text-foreground">Público-alvo</label>
               <textarea
                 value={draft.targetAudience}
                 onChange={e => setDraft({ targetAudience: e.target.value })}
                 rows={4}
-                className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Objetivos do projeto</label>
+              <label className="text-sm font-medium text-foreground">Objetivos do projeto</label>
               <textarea
                 value={draft.objectives}
                 onChange={e => setDraft({ objectives: e.target.value })}
                 rows={4}
-                className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Critérios de sucesso (KPIs)</label>
+              <label className="text-sm font-medium text-foreground">Critérios de sucesso (KPIs)</label>
               <textarea
                 value={draft.kpis}
                 onChange={e => setDraft({ kpis: e.target.value })}
                 rows={4}
-                className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">SLA acordado (horas)</label>
+              <label className="text-sm font-medium text-foreground">SLA acordado (horas)</label>
               <input
                 value={draft.slaHours}
                 onChange={e => setDraft({ slaHours: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Valor do contrato</label>
+              <label className="text-sm font-medium text-foreground">Valor do contrato</label>
               <input
                 value={draft.contractValue}
                 onChange={e => setDraft({ contractValue: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Modelo de cobrança</label>
+            <label className="text-sm font-medium text-foreground">Modelo de cobrança</label>
             <select
               value={draft.billingModel}
               onChange={e => setDraft({ billingModel: e.target.value as any })}
-              className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             >
               <option value="">—</option>
               <option value="FIXED">Fixo</option>
@@ -375,32 +375,32 @@ export function ProjectCreateForm({
         <div className="grid gap-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Stack principal</label>
+              <label className="text-sm font-medium text-foreground">Stack principal</label>
               <input
                 value={draft.mainStack}
                 onChange={e => setDraft({ mainStack: e.target.value })}
                 placeholder="Go, Node, Next, etc."
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Banco de dados</label>
+              <label className="text-sm font-medium text-foreground">Banco de dados</label>
               <input
                 value={draft.databaseType}
                 onChange={e => setDraft({ databaseType: e.target.value })}
                 placeholder="PostgreSQL, MySQL, etc."
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Arquitetura</label>
+              <label className="text-sm font-medium text-foreground">Arquitetura</label>
               <select
                 value={draft.architecture}
                 onChange={e => setDraft({ architecture: e.target.value as any })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">—</option>
                 <option value="MONOLITH">Monolito</option>
@@ -409,43 +409,43 @@ export function ProjectCreateForm({
               </select>
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Cloud provider</label>
+              <label className="text-sm font-medium text-foreground">Cloud provider</label>
               <input
                 value={draft.cloudProvider}
                 onChange={e => setDraft({ cloudProvider: e.target.value })}
                 placeholder="AWS, GCP, etc."
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Repositório git</label>
+            <label className="text-sm font-medium text-foreground">Repositório git</label>
             <input
               value={draft.repositoryUrl}
               onChange={e => setDraft({ repositoryUrl: e.target.value })}
               placeholder="https://github.com/org/repo"
-              className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Integrações externas</label>
+            <label className="text-sm font-medium text-foreground">Integrações externas</label>
             <textarea
               value={draft.externalIntegrations}
               onChange={e => setDraft({ externalIntegrations: e.target.value })}
               rows={4}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Ambiente de deploy</label>
+            <label className="text-sm font-medium text-foreground">Ambiente de deploy</label>
             <input
               value={draft.deployEnvironment}
               onChange={e => setDraft({ deployEnvironment: e.target.value })}
               placeholder="dev/staging/prod, cluster, etc."
-              className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -455,41 +455,41 @@ export function ProjectCreateForm({
         <div className="grid gap-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Data início *</label>
+              <label className="text-sm font-medium text-foreground">Data início *</label>
               <input
                 type="date"
                 value={draft.startDate}
                 onChange={e => setDraft({ startDate: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Data previsão término</label>
+              <label className="text-sm font-medium text-foreground">Data previsão término</label>
               <input
                 type="date"
                 value={draft.estimatedEndDate}
                 onChange={e => setDraft({ estimatedEndDate: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Data real término</label>
+              <label className="text-sm font-medium text-foreground">Data real término</label>
               <input
                 type="date"
                 value={draft.actualEndDate}
                 onChange={e => setDraft({ actualEndDate: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Prioridade</label>
+              <label className="text-sm font-medium text-foreground">Prioridade</label>
               <select
                 value={draft.priority}
                 onChange={e => setDraft({ priority: e.target.value as any })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">—</option>
                 <option value="LOW">Baixa</option>
@@ -502,27 +502,27 @@ export function ProjectCreateForm({
 
           <div className="grid gap-4 md:grid-cols-3">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Horas estimadas</label>
+              <label className="text-sm font-medium text-foreground">Horas estimadas</label>
               <input
                 value={draft.estimatedHours}
                 onChange={e => setDraft({ estimatedHours: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Horas realizadas</label>
+              <label className="text-sm font-medium text-foreground">Horas realizadas</label>
               <input
                 value={draft.actualHours}
                 onChange={e => setDraft({ actualHours: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Complexidade (1–5)</label>
+              <label className="text-sm font-medium text-foreground">Complexidade (1–5)</label>
               <select
                 value={draft.complexity}
                 onChange={e => setDraft({ complexity: e.target.value as any })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">—</option>
                 <option value="1">1</option>
@@ -535,11 +535,11 @@ export function ProjectCreateForm({
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Risco</label>
+            <label className="text-sm font-medium text-foreground">Risco</label>
             <select
               value={draft.riskLevel}
               onChange={e => setDraft({ riskLevel: e.target.value as any })}
-              className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             >
               <option value="">—</option>
               <option value="LOW">Baixo</option>
@@ -554,11 +554,11 @@ export function ProjectCreateForm({
         <div className="grid gap-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Status</label>
+              <label className="text-sm font-medium text-foreground">Status</label>
               <select
                 value={draft.status}
                 onChange={e => setDraft({ status: e.target.value as any })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">—</option>
                 <option value="BACKLOG">Backlog</option>
@@ -571,11 +571,11 @@ export function ProjectCreateForm({
               </select>
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Health Status</label>
+              <label className="text-sm font-medium text-foreground">Health Status</label>
               <select
                 value={draft.health}
                 onChange={e => setDraft({ health: e.target.value as any })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               >
                 <option value="">—</option>
                 <option value="GREEN">Verde</option>
@@ -587,38 +587,38 @@ export function ProjectCreateForm({
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Orçamento estimado</label>
+              <label className="text-sm font-medium text-foreground">Orçamento estimado</label>
               <input
                 value={draft.estimatedBudget}
                 onChange={e => setDraft({ estimatedBudget: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Custo atual</label>
+              <label className="text-sm font-medium text-foreground">Custo atual</label>
               <input
                 value={draft.actualCost}
                 onChange={e => setDraft({ actualCost: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Margem prevista</label>
+              <label className="text-sm font-medium text-foreground">Margem prevista</label>
               <input
                 value={draft.expectedMargin}
                 onChange={e => setDraft({ expectedMargin: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-gray-700">Margem real</label>
+              <label className="text-sm font-medium text-foreground">Margem real</label>
               <input
                 value={draft.actualMargin}
                 onChange={e => setDraft({ actualMargin: e.target.value })}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                className="h-11 rounded-xl border border-border bg-card px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
@@ -627,7 +627,7 @@ export function ProjectCreateForm({
 
       {step === 6 ? (
         <div className="grid gap-4">
-          <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+          <label className="flex items-center gap-3 rounded-2xl border border-border bg-muted px-4 py-3 text-sm text-foreground">
             <input
               type="checkbox"
               checked={draft.allowMultipleTeams}
@@ -637,7 +637,7 @@ export function ProjectCreateForm({
             Permitir múltiplos times?
           </label>
 
-          <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+          <label className="flex items-center gap-3 rounded-2xl border border-border bg-muted px-4 py-3 text-sm text-foreground">
             <input
               type="checkbox"
               checked={draft.allowMultipleBoards}
@@ -647,7 +647,7 @@ export function ProjectCreateForm({
             Permitir múltiplos boards?
           </label>
 
-          <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+          <label className="flex items-center gap-3 rounded-2xl border border-border bg-muted px-4 py-3 text-sm text-foreground">
             <input
               type="checkbox"
               checked={draft.financialControl}
@@ -658,11 +658,11 @@ export function ProjectCreateForm({
           </label>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-gray-700">Visibilidade</label>
+            <label className="text-sm font-medium text-foreground">Visibilidade</label>
             <select
               value={draft.visibility}
               onChange={e => setDraft({ visibility: e.target.value as any })}
-              className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+              className="h-11 rounded-xl border border-border bg-card px-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             >
               <option value="">—</option>
               <option value="PRIVATE">Privado</option>
@@ -674,12 +674,12 @@ export function ProjectCreateForm({
       ) : null}
 
       <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
-        <Button variant="outline" className="rounded-xl bg-white" onClick={onCancel} disabled={submitting}>
+        <Button variant="outline" className="rounded-xl bg-card" onClick={onCancel} disabled={submitting}>
           Cancelar
         </Button>
 
         <div className="flex items-center justify-end gap-2">
-          <Button variant="outline" className="rounded-xl bg-white" onClick={back} disabled={step === 1 || submitting}>
+          <Button variant="outline" className="rounded-xl bg-card" onClick={back} disabled={step === 1 || submitting}>
             Voltar
           </Button>
           {step < 6 ? (

@@ -23,9 +23,10 @@ class InMemoryUsers implements UserRepository {
     const user: User = {
       id: `user-${this.users.length + 1}`,
       organizationId: input.organizationId,
+      unitId: input.unitId ?? null,
       email: input.email,
       passwordHash: input.passwordHash ?? null,
-      clerkUserId: input.clerkUserId ?? null,
+      firebaseUid: input.firebaseUid ?? null,
       roles: input.roles,
     };
     this.users.push(user);
@@ -37,13 +38,18 @@ class InMemoryUsers implements UserRepository {
   async findByEmail(email: string) {
     return this.users.find(u => u.email === email) ?? null;
   }
-  async findByClerkUserId(clerkUserId: string) {
-    return this.users.find(u => u.clerkUserId === clerkUserId) ?? null;
+  async findByFirebaseUid(firebaseUid: string) {
+    return this.users.find(u => u.firebaseUid === firebaseUid) ?? null;
   }
-  async attachClerkUserId(id: string, clerkUserId: string) {
+  async attachFirebaseUid(id: string, firebaseUid: string) {
     const user = this.users.find(u => u.id === id);
     if (!user) throw new Error("not found");
-    user.clerkUserId = clerkUserId;
+    user.firebaseUid = firebaseUid;
+    return user;
+  }
+  async update(id: string, _patch?: Partial<Pick<User, "organizationId" | "roles" | "unitId">>) {
+    const user = this.users.find(u => u.id === id);
+    if (!user) throw new Error("not found");
     return user;
   }
   async listByOrganization(organizationId: string) {
@@ -173,7 +179,7 @@ describe("InviteService", () => {
     const invites = new InMemoryInvites();
     const org = await orgs.create({ name: "Org" });
 
-    users.users.push({ id: "u2", organizationId: org.id, email: "m@a.com", passwordHash: "x", clerkUserId: null, roles: ["MEMBER"] });
+    users.users.push({ id: "u2", organizationId: org.id, unitId: null, email: "m@a.com", passwordHash: "x", firebaseUid: null, roles: ["MEMBER"] });
 
     const svc = new InviteService(orgs, users, invites);
     const created = await svc.createInvite({ userId: "u1", organizationId: org.id, roles: ["ORG_ADMIN"] });

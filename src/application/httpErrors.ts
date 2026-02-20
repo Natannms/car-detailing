@@ -11,6 +11,8 @@ export function domainErrorToHttpStatus(error: DomainError): number {
   switch (error.code) {
     case "UNAUTHORIZED":
       return 401;
+    case "SUBSCRIPTION_REQUIRED":
+      return 402;
     case "FORBIDDEN":
       return 403;
     case "NOT_FOUND":
@@ -21,4 +23,3 @@ export function domainErrorToHttpStatus(error: DomainError): number {
       return 500;
   }
 }
-

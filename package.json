@@ -11,11 +11,18 @@
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
     "prisma:dbpush": "prisma db push",
+    "firebase:seed": "npx -y tsx src/infrastructure/firebase/seedMedicine.ts",
+    "firebase:seed:plans": "npx -y tsx src/infrastructure/firebase/seedPlans.ts",
+    "firebase:rollback": "npx -y tsx src/infrastructure/firebase/rollbackMedicine.ts",
+    "firebase:seed:dev": "npx -y tsx scripts/seed-dev.ts",
+    "firebase:rollback:dev": "npx -y tsx scripts/rollback-dev.ts",
+    "firebase:seed:attendance": "npx -y tsx scripts/seed-attendance.ts",
+    "firebase:reset-all": "npx -y tsx scripts/firebase-reset-all.ts",
+    "firebase:restart:seeder": "npm run firebase:reset-all && npm run firebase:seed:plans && npm run firebase:seed && npm run firebase:seed:dev && npm run firebase:seed:attendance",
     "postinstall": "prisma generate",
     "prepare": "husky"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.37.4",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
@@ -25,11 +32,15 @@
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^11.6.0",
+    "firebase-admin": "^13.6.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.564.0",
     "next": "16.1.6",
+    "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "recharts": "^3.7.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "tw-animate-css": "^1.4.0",
@@ -51,6 +62,7 @@
     "postcss": "^8.5.6",
     "prisma": "^6.16.2",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.20.5",
     "typescript": "^5.3.3"
   }
 }

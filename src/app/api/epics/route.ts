@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { services } from "../../../infrastructure/container";
-import { requireAuthContext } from "../_lib/authClerk";
+import { requireAuthContext } from "../_lib/authFirebase";
 import { errorToResponse, json } from "../_lib/response";
 
 const createSchema = z.object({
@@ -13,7 +13,7 @@ const createSchema = z.object({
 
 export async function GET(request: Request) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const url = new URL(request.url);
     const projectId = z.string().uuid().parse(url.searchParams.get("projectId"));
     const epics = await services.epics.list(auth, projectId);
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const body = createSchema.parse(await request.json());
     const epic = await services.epics.create(auth, body);
     return json({ epic }, { status: 201 });

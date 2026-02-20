@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useClerk } from "@clerk/nextjs";
+import { getFirebaseAuth } from "@/lib/firebaseClient";
 import { clearSession, getSession } from "../../ui/session";
 import { apiFetch } from "../../ui/apiClient";
 
 export default function SessionPage() {
-  const clerk = useClerk();
   const [session, setSession] = useState(() => getSession());
   const [me, setMe] = useState<{ id: string; email: string; roles: string[]; organizationId: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +20,8 @@ export default function SessionPage() {
   const logout = async () => {
     setError(null);
     try {
-      await clerk.signOut({ redirectUrl: "/login" });
+      getFirebaseAuth()?.signOut();
+      await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
     } catch (e) {
       setError("Erro ao sair.");
     } finally {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { services } from "../../../infrastructure/container";
-import { requireAuthContext } from "../_lib/authClerk";
+import { requireAuthContext } from "../_lib/authFirebase";
 import { errorToResponse, json } from "../_lib/response";
 
 const querySchema = z.object({
@@ -14,7 +14,7 @@ const createSchema = z.object({
 
 export async function GET(request: Request) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const url = new URL(request.url);
     const { storyId } = querySchema.parse({ storyId: url.searchParams.get("storyId") });
     const columns = await services.taskBoardColumns.list(auth, storyId);
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const body = createSchema.parse(await request.json());
     const column = await services.taskBoardColumns.create(auth, body);
     return json({ column }, { status: 201 });

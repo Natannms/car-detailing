@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { services } from "../../../../infrastructure/container";
-import { requireAuthContext } from "../../_lib/authClerk";
+import { requireAuthContext } from "../../_lib/authFirebase";
 import { errorToResponse, json } from "../../_lib/response";
 
 const patchSchema = z.object({
@@ -13,7 +13,7 @@ const patchSchema = z.object({
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const { id } = await params;
     const story = await services.stories.get(auth, id);
     return json({ story });
@@ -24,7 +24,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const { id } = await params;
     const patch = patchSchema.parse(await request.json());
     const story = await services.stories.update(auth, id, patch);
@@ -36,7 +36,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const { id } = await params;
     await services.stories.delete(auth, id);
     return json({ ok: true });

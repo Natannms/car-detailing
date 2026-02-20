@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { services } from "../../../infrastructure/container";
-import { requireAuthContext } from "../_lib/authClerk";
+import { requireAuthContext } from "../_lib/authFirebase";
 import { errorToResponse, json } from "../_lib/response";
 
 const createSchema = z.object({
@@ -17,7 +17,7 @@ const createSchema = z.object({
 
 export async function GET() {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const clients = await services.clients.list(auth);
     return json({ clients });
   } catch (e) {
@@ -27,7 +27,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { auth } = await requireAuthContext();
+    const { auth } = await requireAuthContext(request);
     const body = createSchema.parse(await request.json());
     const client = await services.clients.create(auth, {
       name: body.name,

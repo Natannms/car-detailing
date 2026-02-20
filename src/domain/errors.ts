@@ -31,3 +31,8 @@ export class ForbiddenError extends DomainError {
   }
 }
 
+export class PaymentRequiredError extends DomainError {
+  constructor(message = "Subscription required") {
+    super("SUBSCRIPTION_REQUIRED", message);
+  }
+}
