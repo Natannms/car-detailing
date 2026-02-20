@@ -1,7 +1,7 @@
 import { requireAuthContext } from "../../_lib/authFirebase";
 import { errorToResponse, json } from "../../_lib/response";
 import { firestore } from "../../../../infrastructure/firebase/admin";
-import { fromFirestoreDate } from "../../../../infrastructure/firebase/converters";
+import { type FirestoreDate, fromFirestoreDate } from "../../../../infrastructure/firebase/converters";
 
 export const runtime = "nodejs";
 
@@ -48,8 +48,8 @@ export async function GET(request: Request) {
           messageText?: string;
           organizationId?: string;
           unit_id?: string | null;
-          createdAt?: unknown;
-          updatedAt?: unknown;
+          createdAt?: FirestoreDate;
+          updatedAt?: FirestoreDate;
         };
         if (d.organizationId && d.organizationId !== auth.organizationId) return null;
         const createdAt = fromFirestoreDate(d.createdAt);

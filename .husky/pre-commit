@@ -1,3 +1,6 @@
+echo "📐 Verificando TypeScript..."
+npm run typecheck || exit 1
+
 echo "🔍 Verificando console.log..."
 node scripts/check-console.mjs || exit 1
 

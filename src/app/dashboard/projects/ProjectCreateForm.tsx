@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { apiFetch, ApiError } from "../../ui/apiClient";
 import { Button } from "@/components/ui/button";
-import { useProjectCreateStore } from "./projectCreateStore";
+import { type ProjectDraft, useProjectCreateStore } from "./projectCreateStore";
 import Link from "next/link";
 
 type ClientOption = { id: string; name: string; code: string | null };
@@ -34,7 +34,7 @@ function section(title: string, content: string) {
   return `## ${title}\n${c}`;
 }
 
-function buildDescription(draft: ReturnType<typeof useProjectCreateStore>["draft"]) {
+function buildDescription(draft: ProjectDraft) {
   const blocks = [
     section("Descrição detalhada", draft.descriptionDetailed),
     section("Problema que resolve", draft.problem),

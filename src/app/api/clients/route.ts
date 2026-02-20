@@ -15,7 +15,7 @@ const createSchema = z.object({
   notes: z.string().max(4000).optional().nullable(),
 });
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const { auth } = await requireAuthContext(request);
     const clients = await services.clients.list(auth);
