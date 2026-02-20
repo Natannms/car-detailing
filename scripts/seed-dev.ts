@@ -13,6 +13,7 @@
 import { randomUUID } from "crypto";
 import fs from "fs";
 import path from "path";
+import type { DocumentSnapshot } from "firebase-admin/firestore";
 import { auth, firestore } from "../src/infrastructure/firebase/admin";
 
 const PLANS = [
@@ -95,8 +96,8 @@ async function main() {
   const doctorUid = await ensureAuthUser(doctorEmail, password, "Doctor Dev");
 
   const usersRef = db.collection("users");
-  let adminUserDoc = (await usersRef.where("firebaseUid", "==", adminUid).limit(1).get()).docs[0];
-  let doctorUserDoc = (await usersRef.where("firebaseUid", "==", doctorUid).limit(1).get()).docs[0];
+  let adminUserDoc: DocumentSnapshot | undefined = (await usersRef.where("firebaseUid", "==", adminUid).limit(1).get()).docs[0];
+  let doctorUserDoc: DocumentSnapshot | undefined = (await usersRef.where("firebaseUid", "==", doctorUid).limit(1).get()).docs[0];
 
   if (!adminUserDoc) {
     const adminId = randomUUID();
@@ -134,6 +135,7 @@ async function main() {
     await usersRef.doc(doctorUserDoc.id).update({ organizationId: orgId, unitId, updatedAt: now });
   }
 
+  if (!adminUserDoc || !doctorUserDoc) throw new Error("Usuários admin e médico devem existir após o seed.");
   const doctorUserId = doctorUserDoc.id;
 
   console.info("Criando/atualizando médico...");

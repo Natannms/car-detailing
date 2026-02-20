@@ -1,0 +1,3 @@
+# Netlify redirects
+# O roteamento do Next.js (App Router) é tratado pelo @netlify/plugin-nextjs no netlify.toml.
+# Adicione abaixo apenas regras extras (ex.: /old-path -> /new-path 301).
