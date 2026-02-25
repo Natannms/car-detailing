@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { apiFetch, ApiError } from "@/app/ui/apiClient";
 import { useSseSnapshot } from "@/app/ui/useSseSnapshot";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,8 @@ function statusClasses(s: Billing["status"]) {
 }
 
 export function BillingClient() {
+  const searchParams = useSearchParams();
+  const planFromUrl = searchParams.get("plan") ?? "";
   const { data: snap, connected } = useSseSnapshot<{ billing: Billing | null }>("/api/stream/billing");
   const billing = snap?.billing ?? null;
   const billingLoading = !connected;
@@ -72,7 +75,7 @@ export function BillingClient() {
   const [saving, setSaving] = useState(false);
 
   const [plans, setPlans] = useState<Plan[]>([]);
-  const [planId, setPlanId] = useState("basic");
+  const [planId, setPlanId] = useState(planFromUrl || "basic");
   const [billingType, setBillingType] = useState<"PIX" | "CREDIT_CARD">("PIX");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -99,13 +102,17 @@ export function BillingClient() {
     const run = async () => {
       try {
         const r = await apiFetch<{ plans: Plan[] }>("/api/plans");
-        setPlans(r.plans ?? []);
+        const list = r.plans ?? [];
+        setPlans(list);
+        if (planFromUrl && list.some(p => p.id === planFromUrl)) {
+          setPlanId(planFromUrl);
+        }
       } catch {
         setPlans([]);
       }
     };
     void run();
-  }, []);
+  }, [planFromUrl]);
 
   const loadPayments = async () => {
     setError(null);

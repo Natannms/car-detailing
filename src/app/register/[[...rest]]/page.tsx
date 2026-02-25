@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getFirebaseAuth } from "@/lib/firebaseClient";
@@ -9,14 +9,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+type Plan = { id: string; name: string; description: string; monthlyPrice: number | null };
+
 export default function RegisterPage() {
   const router = useRouter();
   const search = useSearchParams();
   const inviteToken = search.get("invite") ?? "";
+  const planId = search.get("plan") ?? "";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+
+  useEffect(() => {
+    if (!planId) return;
+    let cancelled = false;
+    fetch("/api/plans")
+      .then(r => r.json())
+      .then((data: { plans?: Plan[] }) => {
+        if (cancelled) return;
+        const plan = (data.plans ?? []).find(p => p.id === planId);
+        if (plan) setSelectedPlan(plan);
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [planId]);
 
   const createSessionAndRedirect = async (idToken: string) => {
     const res = await fetch("/api/auth/session", {
@@ -33,7 +51,13 @@ export default function RegisterPage() {
     if (inviteToken) {
       await fetch(`/api/invites/token/${encodeURIComponent(inviteToken)}/redeem`, { method: "POST", credentials: "same-origin" });
     }
-    router.push(inviteToken ? "/dashboard/invite" : "/dashboard");
+    if (inviteToken) {
+      router.push("/dashboard/invite");
+    } else if (planId) {
+      router.push(`/dashboard/billing?plan=${encodeURIComponent(planId)}`);
+    } else {
+      router.push("/dashboard");
+    }
     router.refresh();
     return true;
   };
@@ -125,6 +149,16 @@ export default function RegisterPage() {
             <div className="mb-8 text-center">
               <h1 className="text-[28px] font-semibold tracking-tight text-gray-900">Criar conta</h1>
               <p className="mt-2 text-sm text-gray-600">Crie sua conta para começar a usar o Marca AI.</p>
+              {selectedPlan ? (
+                <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm text-gray-700">
+                  <span className="font-semibold text-emerald-700">Plano selecionado:</span> {selectedPlan.name}
+                  {selectedPlan.monthlyPrice != null && (
+                    <span className="ml-1">
+                      — {selectedPlan.monthlyPrice.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}/mês
+                    </span>
+                  )}
+                </div>
+              ) : null}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">

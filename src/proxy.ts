@@ -8,6 +8,7 @@ function isPublicRoute(pathname: string): boolean {
   if (/^\/login(\/.*)?$/.test(pathname)) return true;
   if (/^\/register(\/.*)?$/.test(pathname)) return true;
   if (pathname === "/api/health") return true;
+  if (pathname === "/api/plans") return true;
   if (pathname === "/api/auth/session") return true;
   if (pathname === "/api/auth/logout") return true;
   if (/^\/api\/invites\/token\/[^/]+\/preview$/.test(pathname)) return true;

@@ -8,7 +8,7 @@ import styles from "./AppShell.module.css";
 import { clearSession, getSession, type Session } from "../ui/session";
 
 function isPublicPath(pathname: string) {
-  return pathname.startsWith("/login") || pathname.startsWith("/register") || pathname.startsWith("/dashboard");
+  return pathname === "/" || pathname.startsWith("/login") || pathname.startsWith("/register") || pathname.startsWith("/dashboard");
 }
 
 function extractProjectId(pathname: string) {

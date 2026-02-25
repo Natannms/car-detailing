@@ -61,11 +61,15 @@ export class BillingService {
     }
 
     if (!b.asaasSubscriptionId) {
+      // Sempre usar apenas o ID do plano vindo do cliente; preço e dados vêm exclusivamente do banco.
       const planId = input.planId ?? b.planId ?? "basic";
       const planDoc = await firestore().collection("plans").doc(planId).get().catch(() => null);
-      const plan = planDoc && planDoc.exists ? (planDoc.data() as any) : null;
-      const value = typeof plan?.monthlyPrice === "number" ? plan.monthlyPrice : Number(process.env.ASAAS_SUBSCRIPTION_VALUE ?? "19.9");
-      const name = typeof plan?.name === "string" ? plan.name : null;
+      const plan = planDoc?.exists ? (planDoc.data() as { monthlyPrice?: number; name?: string }) : null;
+      if (!plan || typeof plan.monthlyPrice !== "number") {
+        throw new NotFoundError(`Plano "${planId}" não encontrado ou sem preço no banco. Não é permitido criar assinatura sem plano válido.`);
+      }
+      const value = plan.monthlyPrice;
+      const name = typeof plan.name === "string" ? plan.name : null;
       const description = ((process.env.ASAAS_SUBSCRIPTION_DESCRIPTION ?? "Assinatura") + (name ? ` ${name}` : "")).slice(0, 500);
       const created = await client.createSubscription({
         customer: b.asaasCustomerId!,
